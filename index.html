@@ -42,10 +42,61 @@
         let coinHeight = 200;
         let coinClicked = false;
 
+        const floatingTexts = [];
+
+        class FloatingText {
+            constructor(text, x, y) {
+                this.text = text;
+                this.x = x;
+                this.y = y;
+                this.alpha = 1.0;
+                this.fontSize = 20;
+            }
+
+            update() {
+                this.y -= 1;
+                this.alpha -= 0.02;
+            }
+
+            draw(ctx) {
+                ctx.globalAlpha = this.alpha;
+                ctx.font = `${this.fontSize}px Arial`;
+                ctx.fillStyle = "yellow";
+                ctx.fillText(this.text, this.x, this.y);
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
         bgImg.onload = function() {
             ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
             ctx.drawImage(coinImg, coinX, coinY, coinWidth, coinHeight);
         };
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < floatingTexts.length; i++) {
+                const text = floatingTexts[i];
+                text.update();
+                text.draw(ctx);
+            }
+
+            // Remove texts that are no longer visible
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                if (floatingTexts[i].alpha <= 0) {
+                    floatingTexts.splice(i, 1);
+                }
+            }
+
+            if (coinClicked) {
+                ctx.drawImage(coinPushImg, coinX, coinY, coinWidth, coinHeight);
+            } else {
+                ctx.drawImage(coinImg, coinX, coinY, coinWidth, coinHeight);
+            }
+
+            requestAnimationFrame(update);
+        }
 
         canvas.addEventListener('click', function(event) {
             const rect = canvas.getBoundingClientRect();
@@ -55,16 +106,17 @@
             if (x > coinX && x < coinX + coinWidth && y > coinY && y < coinY + coinHeight) {
                 coinClicked = true;
                 score++;
-                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-                ctx.drawImage(coinPushImg, coinX, coinY, coinWidth, coinHeight);
+                floatingTexts.push(new FloatingText('+1', x, y));
+
                 setTimeout(() => {
                     coinClicked = false;
-                    ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(coinImg, coinX, coinY, coinWidth, coinHeight);
                 }, 100);
+
                 console.log("Score: " + score);
             }
         });
+
+        update();
     </script>
 </body>
 </html>
