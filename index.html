@@ -36,8 +36,8 @@
         const coinPushImg = new Image();
         coinPushImg.src = 'coin-push.png';
 
-        let coinX = (canvas.width - 250) / 2;
-        let coinY = (canvas.height - 250) / 2;
+        let coinX = (canvas.width - 200) / 2;
+        let coinY = (canvas.height - 200) / 2;
         let coinWidth = 200;
         let coinHeight = 200;
         let coinClicked = false;
@@ -50,19 +50,22 @@
                 this.x = x;
                 this.y = y;
                 this.alpha = 1.0;
-                this.fontSize = 30;
+                this.fontSize = 20;
+                this.dy = 0;  // Initial offset for smoother transition
             }
 
             update() {
-                this.y -= 1;
+                this.dy += 0.5; // Smooth out the movement speed
+                this.y -= 0.5; // Slower upward movement
                 this.alpha -= 0.02;
+                this.fontSize += 0.1; // Gradually increase the font size for a nice effect
             }
 
             draw(ctx) {
                 ctx.globalAlpha = this.alpha;
                 ctx.font = `${this.fontSize}px Arial`;
                 ctx.fillStyle = "rgb(255, 215, 0)"; // Bright yellow color
-                ctx.fillText(this.text, this.x, this.y);
+                ctx.fillText(this.text, this.x, this.y + this.dy);
                 ctx.globalAlpha = 1.0;
             }
         }
