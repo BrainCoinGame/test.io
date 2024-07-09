@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clicker Game</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Goldman&display=swap');
+
         body, html {
             margin: 0;
             padding: 0;
@@ -14,17 +16,49 @@
             justify-content: center;
             align-items: center;
             background-color: #000;
+            font-family: 'Goldman', cursive;
         }
         canvas {
             border: 1px solid #fff;
         }
+        #score {
+            position: absolute;
+            top: 120px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: 24px;
+            z-index: 1;
+        }
+        #progress {
+            position: absolute;
+            top: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 242px;
+            height: 10px;
+            background: #385682;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(to right, #385682, #5297FF);
+        }
     </style>
 </head>
 <body>
+    <div id="score">Score: 0</div>
+    <div id="progress">
+        <div id="progress-bar"></div>
+    </div>
     <canvas id="gameCanvas" width="360" height="720"></canvas>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+        const progressBar = document.getElementById('progress-bar');
         let score = 0;
 
         const bgImg = new Image();
@@ -58,12 +92,11 @@
                 this.dy += 0.5; // Increase movement speed
                 this.y -= 0.5; // Faster upward movement
                 this.alpha -= 0.01; // Decrease alpha more slowly for longer visibility
-                this.fontSize += 0.0; // Gradually increase the font size for a nice effect
             }
 
             draw(ctx) {
                 ctx.globalAlpha = this.alpha;
-                ctx.font = `${this.fontSize}px Arial`;
+                ctx.font = `${this.fontSize}px Goldman`;
                 ctx.fillStyle = "rgb(255, 215, 0)"; // Bright yellow color
                 ctx.fillText(this.text, this.x, this.y + this.dy);
                 ctx.globalAlpha = 1.0;
@@ -101,6 +134,15 @@
             requestAnimationFrame(update);
         }
 
+        function updateScore() {
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+
+        function updateProgressBar() {
+            const progress = Math.min((score % 100) / 100, 1);
+            progressBar.style.width = `${progress * 100}%`;
+        }
+
         canvas.addEventListener('click', function(event) {
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
@@ -110,6 +152,9 @@
                 coinClicked = true;
                 score++;
                 floatingTexts.push(new FloatingText('+1', x, y - 100)); // Initial position 100 pixels higher
+
+                updateScore();
+                updateProgressBar();
 
                 setTimeout(() => {
                     coinClicked = false;
