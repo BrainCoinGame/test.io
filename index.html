@@ -49,15 +49,15 @@
                 this.text = text;
                 this.x = x;
                 this.y = y;
-                this.alpha = 3.0;
+                this.alpha = 1.0;
                 this.fontSize = 20;
                 this.dy = 0; // Initial offset for smoother transition
             }
 
             update() {
-                this.dy += 1; // Increase movement speed
+                this.dy += 2; // Increase movement speed
                 this.y -= 1.5; // Faster upward movement
-                this.alpha -= 0.01; // Decrease alpha more slowly for longer visibility
+                this.alpha -= 0.05; // Decrease alpha more slowly for longer visibility
                 this.fontSize += 0.15; // Gradually increase the font size for a nice effect
             }
 
