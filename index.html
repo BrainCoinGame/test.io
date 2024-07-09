@@ -51,14 +51,14 @@
                 this.y = y;
                 this.alpha = 1.0;
                 this.fontSize = 20;
-                this.dy = 0;  // Initial offset for smoother transition
+                this.dy = 0; // Initial offset for smoother transition
             }
 
             update() {
-                this.dy += 0.5; // Smooth out the movement speed
-                this.y -= 0.5; // Slower upward movement
-                this.alpha -= 0.02;
-                this.fontSize += 0.1; // Gradually increase the font size for a nice effect
+                this.dy += 1; // Increase movement speed
+                this.y -= 1.5; // Faster upward movement
+                this.alpha -= 0.01; // Decrease alpha more slowly for longer visibility
+                this.fontSize += 0.15; // Gradually increase the font size for a nice effect
             }
 
             draw(ctx) {
