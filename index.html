@@ -61,7 +61,7 @@
             draw(ctx) {
                 ctx.globalAlpha = this.alpha;
                 ctx.font = `${this.fontSize}px Arial`;
-                ctx.fillStyle = "yellow";
+                ctx.fillStyle = "rgb(255, 215, 0)"; // Bright yellow color
                 ctx.fillText(this.text, this.x, this.y);
                 ctx.globalAlpha = 1.0;
             }
@@ -106,7 +106,7 @@
             if (x > coinX && x < coinX + coinWidth && y > coinY && y < coinY + coinHeight) {
                 coinClicked = true;
                 score++;
-                floatingTexts.push(new FloatingText('+1', x, y));
+                floatingTexts.push(new FloatingText('+1', x, y - 100)); // Initial position 100 pixels higher
 
                 setTimeout(() => {
                     coinClicked = false;
