@@ -57,6 +57,81 @@
         #reverse-progress-bar {
             background: linear-gradient(to left, #385682, #900505);
         }
+
+        /* Group 3 */
+        #group3 {
+            position: absolute;
+            width: 148px;
+            height: 49px;
+            left: 0px;
+            top: 79px;
+        }
+
+        /* Rectangle 5 */
+        #rectangle5 {
+            box-sizing: border-box;
+            position: absolute;
+            width: 148px;
+            height: 49px;
+            left: 0px;
+            top: 79px;
+            background: #000000;
+            border: 2px solid #FFFFFF;
+            border-radius: 7px;
+        }
+
+        /* mail-inbox-envelope-notification--Streamline-Plump */
+        #mail-icon {
+            position: absolute;
+            width: 33px;
+            height: 33px;
+            left: 10px;
+            top: 86px;
+        }
+
+        /* Vector */
+        #vector1, #vector2, #vector3 {
+            position: absolute;
+            background: #FAE20C;
+        }
+
+        #vector1 {
+            left: 3.18%;
+            right: 7.36%;
+            top: 19.79%;
+            bottom: 32.29%;
+        }
+
+        #vector2 {
+            left: 3.12%;
+            right: 7.29%;
+            top: 58.19%;
+            bottom: 3.13%;
+        }
+
+        #vector3 {
+            left: 58.33%;
+            right: 4.17%;
+            top: 4.17%;
+            bottom: 58.33%;
+        }
+
+        /* connect wallet */
+        #connect-wallet {
+            position: absolute;
+            width: 99px;
+            height: 36px;
+            left: 48px;
+            top: 86px;
+            font-family: 'Koulen';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 91%;
+            letter-spacing: 0.22em;
+            color: #FFFFFF;
+        }
+
     </style>
 </head>
 <body>
@@ -68,6 +143,14 @@
         <div id="reverse-progress-bar"></div>
     </div>
     <canvas id="gameCanvas" width="360" height="720"></canvas>
+    <div id="group3">
+        <div id="rectangle5"></div>
+        <img id="mail-icon" src="mail-inbox-envelope-notification--Streamline-Plump.png" alt="Mail Icon">
+        <div id="vector1"></div>
+        <div id="vector2"></div>
+        <div id="vector3"></div>
+        <div id="connect-wallet">Connect Wallet</div>
+    </div>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
