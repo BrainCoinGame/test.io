@@ -76,8 +76,8 @@
         const reverseProgressBar = document.getElementById('reverse-progress-bar');
         let score = 0;
         let energy = 1.0; // Start with full energy
-        const energyDecrement = 0.1; // Energy decrease per click
-        const energyRecoveryRate = 1 / (5 * 60 * 60); // Full recovery in 5 minutes (300 seconds)
+        const energyDecrement = 1 / 100; // Energy decrease per click (100 clicks to deplete)
+        const energyRecoveryRate = 1 / (5 * 60); // Full recovery in 5 minutes (300 seconds)
 
         const bgImg = new Image();
         bgImg.src = 'BG.png';
