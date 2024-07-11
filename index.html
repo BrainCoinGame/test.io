@@ -44,7 +44,7 @@
             transform: translateX(-50%);
         }
         #reverse-progress {
-            bottom: 165px;
+            bottom: 120px;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -75,7 +75,9 @@
         const progressBar = document.getElementById('progress-bar');
         const reverseProgressBar = document.getElementById('reverse-progress-bar');
         let score = 0;
-        let reverseProgress = 1.0; // Reverse progress level from 1 to 0
+        let energy = 1.0; // Start with full energy
+        const energyDecrement = 0.1; // Energy decrease per click
+        const energyRecoveryRate = 1 / (5 * 60 * 60); // Full recovery in 5 minutes (300 seconds)
 
         const bgImg = new Image();
         bgImg.src = 'BG.png';
@@ -147,9 +149,11 @@
                 ctx.drawImage(coinImg, coinX, coinY, coinWidth, coinHeight);
             }
 
-            reverseProgress -= 0.001; // Decrease reverse progress over time
-            if (reverseProgress < 0) reverseProgress = 0;
-            updateReverseProgressBar();
+            if (energy < 1) {
+                energy += energyRecoveryRate;
+                if (energy > 1) energy = 1;
+                updateReverseProgressBar();
+            }
 
             requestAnimationFrame(update);
         }
@@ -164,28 +168,32 @@
         }
 
         function updateReverseProgressBar() {
-            reverseProgressBar.style.width = `${reverseProgress * 100}%`;
+            reverseProgressBar.style.width = `${energy * 100}%`;
         }
 
         canvas.addEventListener('click', function(event) {
-            const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
+            if (energy > 0) {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
 
-            if (x > coinX && x < coinX + coinWidth && y > coinY && y < coinY + coinHeight) {
-                coinClicked = true;
-                score++;
-                reverseProgress = 1.0; // Reset reverse progress on click
-                floatingTexts.push(new FloatingText('+1', x, y - 100)); // Initial position 100 pixels higher
+                if (x > coinX && x < coinX + coinWidth && y > coinY && y < coinY + coinHeight) {
+                    coinClicked = true;
+                    score++;
+                    energy -= energyDecrement;
+                    if (energy < 0) energy = 0;
+                    floatingTexts.push(new FloatingText('+1', x, y - 100)); // Initial position 100 pixels higher
 
-                updateScore();
-                updateProgressBar();
+                    updateScore();
+                    updateProgressBar();
+                    updateReverseProgressBar();
 
-                setTimeout(() => {
-                    coinClicked = false;
-                }, 100);
+                    setTimeout(() => {
+                        coinClicked = false;
+                    }, 100);
 
-                console.log("Score: " + score);
+                    console.log("Score: " + score);
+                }
             }
         });
 
