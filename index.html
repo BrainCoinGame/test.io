@@ -30,21 +30,29 @@
             font-size: 24px;
             z-index: 1;
         }
-        #progress {
+        #progress, #energy {
             position: absolute;
-            top: 170px;
-            left: 50%;
-            transform: translateX(-50%);
             width: 242px;
             height: 10px;
             background: #385682;
             border-radius: 5px;
             overflow: hidden;
         }
-        #progress-bar {
-            width: 0;
+        #progress {
+            top: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #energy {
+            top: 329px;
+            left: 372px;
+        }
+        #progress-bar, #energy-bar {
             height: 100%;
             background: linear-gradient(to right, #385682, #5297FF);
+        }
+        #energy-bar {
+            background: linear-gradient(to left, #FF0000, #FF4500);
         }
     </style>
 </head>
@@ -53,13 +61,18 @@
     <div id="progress">
         <div id="progress-bar"></div>
     </div>
+    <div id="energy">
+        <div id="energy-bar"></div>
+    </div>
     <canvas id="gameCanvas" width="360" height="720"></canvas>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreDisplay = document.getElementById('score');
         const progressBar = document.getElementById('progress-bar');
+        const energyBar = document.getElementById('energy-bar');
         let score = 0;
+        let energy = 1.0; // Energy level from 0 to 1
 
         const bgImg = new Image();
         bgImg.src = 'BG.png';
@@ -131,16 +144,24 @@
                 ctx.drawImage(coinImg, coinX, coinY, coinWidth, coinHeight);
             }
 
+            energy -= 0.001; // Decrease energy over time
+            if (energy < 0) energy = 0;
+            updateEnergyBar();
+
             requestAnimationFrame(update);
         }
 
         function updateScore() {
-            scoreDisplay.textContent = `${score}`;
+            scoreDisplay.textContent = `Score: ${score}`;
         }
 
         function updateProgressBar() {
             const progress = Math.min((score % 100) / 100, 1);
             progressBar.style.width = `${progress * 100}%`;
+        }
+
+        function updateEnergyBar() {
+            energyBar.style.width = `${energy * 100}%`;
         }
 
         canvas.addEventListener('click', function(event) {
@@ -151,6 +172,7 @@
             if (x > coinX && x < coinX + coinWidth && y > coinY && y < coinY + coinHeight) {
                 coinClicked = true;
                 score++;
+                energy = Math.min(energy + 0.1, 1.0); // Increase energy on click but not above 1.0
                 floatingTexts.push(new FloatingText('+1', x, y - 100)); // Initial position 100 pixels higher
 
                 updateScore();
