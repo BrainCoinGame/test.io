@@ -30,7 +30,7 @@
             font-size: 24px;
             z-index: 1;
         }
-        #progress, #energy {
+        #progress, #energy, #reverse-progress {
             position: absolute;
             width: 242px;
             height: 10px;
@@ -45,14 +45,25 @@
         }
         #energy {
             top: 329px;
-            left: 372px;
+            left: 50%;
+            transform: translateX(-50%);
         }
-        #progress-bar, #energy-bar {
+        #reverse-progress {
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #progress-bar, #energy-bar, #reverse-progress-bar {
             height: 100%;
+        }
+        #progress-bar {
             background: linear-gradient(to right, #385682, #5297FF);
         }
         #energy-bar {
-            background: linear-gradient(to left, #FF0000, #FF4500);
+            background: linear-gradient(to right, #385682, #5297FF);
+        }
+        #reverse-progress-bar {
+            background: linear-gradient(to left, #385682, #900505);
         }
     </style>
 </head>
@@ -64,6 +75,9 @@
     <div id="energy">
         <div id="energy-bar"></div>
     </div>
+    <div id="reverse-progress">
+        <div id="reverse-progress-bar"></div>
+    </div>
     <canvas id="gameCanvas" width="360" height="720"></canvas>
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -71,8 +85,10 @@
         const scoreDisplay = document.getElementById('score');
         const progressBar = document.getElementById('progress-bar');
         const energyBar = document.getElementById('energy-bar');
+        const reverseProgressBar = document.getElementById('reverse-progress-bar');
         let score = 0;
         let energy = 1.0; // Energy level from 0 to 1
+        let reverseProgress = 1.0; // Reverse progress level from 1 to 0
 
         const bgImg = new Image();
         bgImg.src = 'BG.png';
@@ -148,6 +164,10 @@
             if (energy < 0) energy = 0;
             updateEnergyBar();
 
+            reverseProgress -= 0.001; // Decrease reverse progress over time
+            if (reverseProgress < 0) reverseProgress = 0;
+            updateReverseProgressBar();
+
             requestAnimationFrame(update);
         }
 
@@ -164,6 +184,10 @@
             energyBar.style.width = `${energy * 100}%`;
         }
 
+        function updateReverseProgressBar() {
+            reverseProgressBar.style.width = `${reverseProgress * 100}%`;
+        }
+
         canvas.addEventListener('click', function(event) {
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
@@ -173,6 +197,7 @@
                 coinClicked = true;
                 score++;
                 energy = Math.min(energy + 0.1, 1.0); // Increase energy on click but not above 1.0
+                reverseProgress = 1.0; // Reset reverse progress on click
                 floatingTexts.push(new FloatingText('+1', x, y - 100)); // Initial position 100 pixels higher
 
                 updateScore();
