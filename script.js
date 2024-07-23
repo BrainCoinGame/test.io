@@ -11,7 +11,7 @@ const coin = document.getElementById('coin');
 const brainCoinsDisplay = document.getElementById('brain-coins');
 const progressBar = document.getElementById('progress-bar');
 const energyBar = document.getElementById('energy-bar');
-const flyingValues = document.getElementById('flying-values');
+const flyingValuesContainer = document.getElementById('flying-values');
 const buyEnergyButton = document.getElementById('buy-energy');
 
 function updateProgressBar() {
@@ -32,17 +32,14 @@ function updateEnergyBar() {
 function showFlyingValue(amount) {
     const value = document.createElement('div');
     value.textContent = `+${amount}`;
-    value.style.position = 'absolute';
-    value.style.top = '0';
+    value.className = 'flying-value';
     value.style.left = `${Math.random() * 60 - 30}px`;
-    value.style.fontSize = '24px';
-    value.style.color = '#ff0';
-    flyingValues.appendChild(value);
+    flyingValuesContainer.appendChild(value);
     
     setTimeout(() => {
-        value.style.top = '-40px';
+        value.style.transform = 'translateY(-100px)';
         value.style.opacity = '0';
-        setTimeout(() => flyingValues.removeChild(value), 1000);
+        setTimeout(() => flyingValuesContainer.removeChild(value), 1000);
     }, 100);
 }
 
