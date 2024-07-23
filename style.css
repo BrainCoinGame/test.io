@@ -33,6 +33,27 @@ header {
     margin-bottom: 10px;
 }
 
+#auth-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #1c73e8;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#login-button:hover {
+    background-color: #155ab5;
+}
+
 .progress-bar-container,
 .energy-bar-container {
     width: 80%;
@@ -44,12 +65,18 @@ header {
     height: 20px;
     background-color: #0f0;
     width: 0;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .energy-bar {
     height: 20px;
     background-color: #f00;
     width: 100%;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 main {
@@ -72,7 +99,7 @@ main {
 
 #flying-values {
     position: absolute;
-    top: -50px;
+    top: -60px;
     left: 0;
     right: 0;
     text-align: center;
@@ -105,6 +132,7 @@ button {
     border: none;
     color: #fff;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 button:hover {
