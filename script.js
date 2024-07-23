@@ -8,12 +8,11 @@ let progress = 0;
 let progressIncrement = 10;
 
 const coin = document.getElementById('coin');
-const coinPush = document.getElementById('coin-push');
 const brainCoinsDisplay = document.getElementById('brain-coins');
 const progressBar = document.getElementById('progress-bar');
 const energyBar = document.getElementById('energy-bar');
+const flyingValues = document.getElementById('flying-values');
 const buyEnergyButton = document.getElementById('buy-energy');
-const boostButton = document.getElementById('boost');
 
 function updateProgressBar() {
     progressBar.style.width = progress + '%';
@@ -30,22 +29,33 @@ function updateEnergyBar() {
     }
 }
 
+function showFlyingValue(amount) {
+    const value = document.createElement('div');
+    value.textContent = `+${amount}`;
+    value.style.position = 'absolute';
+    value.style.top = '0';
+    value.style.left = `${Math.random() * 60 - 30}px`;
+    value.style.fontSize = '24px';
+    value.style.color = '#ff0';
+    flyingValues.appendChild(value);
+    
+    setTimeout(() => {
+        value.style.top = '-40px';
+        value.style.opacity = '0';
+        setTimeout(() => flyingValues.removeChild(value), 1000);
+    }, 100);
+}
+
 function handleClick() {
     if (energy > 0) {
-        coin.style.display = 'none';
-        coinPush.style.display = 'block';
-        setTimeout(() => {
-            coin.style.display = 'block';
-            coinPush.style.display = 'none';
-        }, 200);
-
         brainCoins += 1;
         energy -= energyDecayRate;
         progress += progressIncrement;
-
+        
         brainCoinsDisplay.textContent = `Coins: ${brainCoins}`;
         updateProgressBar();
         updateEnergyBar();
+        showFlyingValue(1);
     }
 }
 
