@@ -12,6 +12,8 @@ const brainCoinsDisplay = document.getElementById('brain-coins');
 const progressBar = document.getElementById('progress-bar');
 const energyBar = document.getElementById('energy-bar');
 const flyingValuesContainer = document.getElementById('flying-values');
+const authSection = document.getElementById('auth-section');
+const gameInfo = document.getElementById('game-info');
 const buyEnergyButton = document.getElementById('buy-energy');
 
 function updateProgressBar() {
@@ -67,8 +69,59 @@ function buyEnergy() {
     }
 }
 
+function loadUserData() {
+    // Example request to get user data from server
+    fetch('/api/user-data', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            brainCoins = data.brainCoins;
+            energy = data.energy;
+            progress = data.progress;
+            brainCoinsDisplay.textContent = `Coins: ${brainCoins}`;
+            updateProgressBar();
+            updateEnergyBar();
+            authSection.style.display = 'none';
+            gameInfo.style.display = 'block';
+        }
+    })
+    .catch(err => console.error('Error loading user data:', err));
+}
+
+function handleTelegramAuth(user) {
+    // Save user data to the server
+    fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            telegramId: user.id,
+            username: user.username
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadUserData();
+        }
+    })
+    .catch(err => console.error('Error authenticating user:', err));
+}
+
+// Event listeners
 coin.addEventListener('click', handleClick);
 buyEnergyButton.addEventListener('click', buyEnergy);
+
+// Telegram authentication callback
+window.TelegramLoginWidget = function (user) {
+    if (user) {
+        handleTelegramAuth(user);
+    }
+};
 
 // Energy decay simulation
 setInterval(() => {
