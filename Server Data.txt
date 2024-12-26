@@ -1,7 +1,0 @@
-Project information:
-   - Project ID: braingame2000
-   - Project Name: braingame2000
-   
-   Firebase console is available at
-https://console.firebase.google.com/project/braingame2000/overview
-i  Using project braingame2000 (braingame2000)
